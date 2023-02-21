@@ -4,6 +4,12 @@ FROM node
 # Run all commands in this container directory
 WORKDIR /app
 
+COPY package.json /app
+
+# RUN - executed when creating an image
+# Install all node dependencies
+RUN npm install
+
 # First (.) = soruce = Copy all files from where the Dockerfile currently lives 
 # Second (.) = destination  = Store all files into the current working directory of the conatiner i.e /app
 # COPY . .
@@ -12,9 +18,6 @@ WORKDIR /app
 # Copy all code from nodejs_app into container /app folder
 COPY . /app
 
-# RUN - executed when creating an image
-# Install all node dependencies
-RUN npm install
 
 # Expose port 80 to our local machine
 EXPOSE 80
