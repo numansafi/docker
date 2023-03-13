@@ -1,0 +1,50 @@
+# Docker compose runs containers in detach mode and removes them once conatiners have been stopped.
+# Docker compose also creates a netword for the containers out of the box
+# there is no need to craete a network as docker will doi it and add all conatiners to that network
+# Version of docker compose you are using
+version: "3.8"
+# Containers you want to use
+services:
+  # Name of the conatiner [monogodb]
+  mongodb:
+    # Image needed to build the container
+    image: "mongo"
+    # Create volumes for conatiner of needed
+    volumes:
+      - data:/data/db
+    container_name: mongodb # Give a name to the container
+    # Read in ENV variables stored in .env files
+    # rather than define them in  'environment'
+    #### Removed MongoDB AUth as it would not connect to backend
+    # env_file:
+    #   - ./env/mongo.env
+
+  backend:
+    # Build an image from a Dockerfile
+    # give the path of where the Dockerfile is
+    build: ./backend
+    ports:
+      - "80:80"
+    volumes:
+      - logs:/app/logs # Named Volume
+      - ./backend:/app # Bind Mount
+      - /app/node_modules # anonymnous volume
+    container_name: goals_backend
+    # env_file:
+    #   - ./env/backend.env
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+    container_name: goals_frontend
+
+# Named volumes have to be listed under volumes
+# so docker can create these volumes
+volumes:
+  data:
+  logs:
