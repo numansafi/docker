@@ -12,6 +12,7 @@ services:
     # Create volumes for conatiner of needed
     volumes:
       - data:/data/db
+    container_name: mongodb # Give a name to the container
     # Read in ENV variables stored in .env files
     # rather than define them in  'environment'
     #### Removed MongoDB AUth as it would not connect to backend
@@ -28,12 +29,19 @@ services:
       - logs:/app/logs # Named Volume
       - ./backend:/app # Bind Mount
       - /app/node_modules # anonymnous volume
+    container_name: goals_backend
     # env_file:
     #   - ./env/backend.env
     depends_on:
       - mongodb
 
-  # frontend:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+    container_name: goals_frontend
 
 # Named volumes have to be listed under volumes
 # so docker can create these volumes
