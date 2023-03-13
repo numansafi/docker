@@ -14,8 +14,9 @@ services:
       - data:/data/db
     # Read in ENV variables stored in .env files
     # rather than define them in  'environment'
-    env_file:
-      - ./env/mongo.env
+    #### Removed MongoDB AUth as it would not connect to backend
+    # env_file:
+    #   - ./env/mongo.env
 
   backend:
     # Build an image from a Dockerfile
@@ -27,8 +28,8 @@ services:
       - logs:/app/logs # Named Volume
       - ./backend:/app # Bind Mount
       - /app/node_modules # anonymnous volume
-    env_file:
-      - ./env/backend.env
+    # env_file:
+    #   - ./env/backend.env
     depends_on:
       - mongodb
 
